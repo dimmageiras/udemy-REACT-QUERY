@@ -14,15 +14,9 @@ const usePeopleService = () => {
     getNextPageParam: (lastPage) => lastPage.next,
   });
 
-  return {
-    data: peopleQuery.data || { pages: [] },
-    error: peopleQuery.error,
-    fetchNextPage: peopleQuery.fetchNextPage,
-    hasNextPage: peopleQuery.hasNextPage,
-    isError: peopleQuery.isError,
-    isFetchingNextPage: peopleQuery.isFetchingNextPage,
-    isLoading: peopleQuery.isLoading,
-  };
+  Reflect.set(peopleQuery, "data", peopleQuery.data || { pages: [] });
+
+  return peopleQuery;
 };
 
 export default usePeopleService;

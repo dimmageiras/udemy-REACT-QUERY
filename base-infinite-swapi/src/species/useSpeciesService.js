@@ -14,15 +14,9 @@ const useSpeciesService = () => {
     getNextPageParam: (lastPage) => lastPage.next,
   });
 
-  return {
-    data: speciesQuery.data || { pages: [] },
-    error: speciesQuery.error,
-    fetchNextPage: speciesQuery.fetchNextPage,
-    hasNextPage: speciesQuery.hasNextPage,
-    isError: speciesQuery.isError,
-    isFetchingNextPage: speciesQuery.isFetchingNextPage,
-    isLoading: speciesQuery.isLoading,
-  };
+  Reflect.set(speciesQuery, "data", speciesQuery.data || { pages: [] });
+
+  return speciesQuery;
 };
 
 export default useSpeciesService;
