@@ -1,5 +1,16 @@
-.loading {
-  position: fixed;
-  top: 5px;
-  right: 5px;
+.app {
+  .app-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    div {
+      position: relative;
+
+      .loading {
+        position: absolute;
+        right: 0.3125rem;
+        top: 0.3125rem;
+      }
+    }
+  }
 }

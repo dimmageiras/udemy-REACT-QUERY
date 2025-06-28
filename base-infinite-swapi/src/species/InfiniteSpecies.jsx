@@ -1,13 +1,51 @@
-import InfiniteScroll from "react-infinite-scroller";
-import { Species } from "./Species";
+import { useMemo } from "react";
+import Species from "./Species";
+import useSpeciesService from "./useSpeciesService";
 
-const initialUrl = "https://swapi.dev/api/species/";
-const fetchUrl = async (url) => {
-  const response = await fetch(url);
-  return response.json();
+const InfiniteSpecies = () => {
+  const {
+    data: { pages },
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isError,
+    isFetching,
+    isLoading,
+  } = useSpeciesService();
+
+  const speciesData = useMemo(() => {
+    return pages.flatMap((page) => page.results);
+  }, [pages]);
+
+  if (isLoading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error! {error.toString()}</div>;
+  }
+
+  return (
+    <div>
+      {isFetching ? <div className="loading">Loading...</div> : null}
+      <div>
+        <ul>
+          {speciesData.map((species, speciesIndex) => {
+            const isLastSpecies = speciesIndex === speciesData.length - 1;
+
+            return (
+              <Species
+                fetchMoreSpecies={fetchNextPage}
+                key={species.url}
+                shouldFetch={isLastSpecies && hasNextPage}
+                {...species}
+              />
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  );
 };
 
-export function InfiniteSpecies() {
-  // TODO: get data for InfiniteScroll via React Query
-  return <InfiniteScroll />;
-}
+export default InfiniteSpecies;
