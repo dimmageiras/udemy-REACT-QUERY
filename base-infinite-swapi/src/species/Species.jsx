@@ -1,4 +1,3 @@
-import { memo } from "react";
 import { InView } from "react-intersection-observer";
 
 const Species = ({
@@ -28,4 +27,4 @@ const Species = ({
   );
 };
 
-export default memo(Species);
+export default Species;

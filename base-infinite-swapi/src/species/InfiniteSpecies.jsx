@@ -17,6 +17,21 @@ const InfiniteSpecies = () => {
     return pages.flatMap((page) => page.results);
   }, [pages]);
 
+  const speciesElements = useMemo(() => {
+    return speciesData.map((species, speciesIndex) => {
+      const isLastSpecies = speciesIndex === speciesData.length - 1;
+
+      return (
+        <Species
+          fetchMoreSpecies={fetchNextPage}
+          key={species.url}
+          shouldFetch={isLastSpecies && hasNextPage}
+          {...species}
+        />
+      );
+    });
+  }, [fetchNextPage, hasNextPage, speciesData]);
+
   if (isLoading) {
     return <div className="loading">Loading...</div>;
   }
@@ -29,20 +44,7 @@ const InfiniteSpecies = () => {
     <div>
       {isFetching ? <div className="loading">Loading...</div> : null}
       <div>
-        <ul>
-          {speciesData.map((species, speciesIndex) => {
-            const isLastSpecies = speciesIndex === speciesData.length - 1;
-
-            return (
-              <Species
-                fetchMoreSpecies={fetchNextPage}
-                key={species.url}
-                shouldFetch={isLastSpecies && hasNextPage}
-                {...species}
-              />
-            );
-          })}
-        </ul>
+        <ul>{speciesElements}</ul>
       </div>
     </div>
   );

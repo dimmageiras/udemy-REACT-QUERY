@@ -17,6 +17,23 @@ const InfinitePeople = () => {
     return pages.flatMap((page) => page.results);
   }, [pages]);
 
+  const peopleElements = useMemo(
+    () =>
+      peopleData.map((person, personIndex) => {
+        const isLastPerson = personIndex === peopleData.length - 1;
+
+        return (
+          <Person
+            fetchMorePeople={fetchNextPage}
+            key={person.url}
+            shouldFetch={isLastPerson && hasNextPage}
+            {...person}
+          />
+        );
+      }),
+    [fetchNextPage, hasNextPage, peopleData]
+  );
+
   if (isLoading) {
     return <div className="loading">Loading...</div>;
   }
@@ -29,20 +46,7 @@ const InfinitePeople = () => {
     <div>
       {isFetching ? <div className="loading">Loading...</div> : null}
       <div>
-        <ul>
-          {peopleData.map((person, personIndex) => {
-            const isLastPerson = personIndex === peopleData.length - 1;
-
-            return (
-              <Person
-                fetchMorePeople={fetchNextPage}
-                shouldFetch={isLastPerson && hasNextPage}
-                key={person.url}
-                {...person}
-              />
-            );
-          })}
-        </ul>
+        <ul>{peopleElements}</ul>
       </div>
     </div>
   );

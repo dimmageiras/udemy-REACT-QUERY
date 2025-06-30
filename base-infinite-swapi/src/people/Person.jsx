@@ -1,4 +1,3 @@
-import { memo } from "react";
 import { InView } from "react-intersection-observer";
 
 const Person = ({
@@ -28,4 +27,4 @@ const Person = ({
   );
 };
 
-export default memo(Person);
+export default Person;
