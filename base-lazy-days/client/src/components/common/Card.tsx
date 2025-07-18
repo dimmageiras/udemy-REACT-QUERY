@@ -18,7 +18,7 @@ interface CardProps {
   image: ImageType;
   cardContents: ReactNode;
 }
-export function Card({ itemName, image, cardContents }: CardProps) {
+export const Card = ({ itemName, image, cardContents }: CardProps) => {
   return (
     <Center py={12}>
       <Box
@@ -54,4 +54,4 @@ export function Card({ itemName, image, cardContents }: CardProps) {
       </Box>
     </Center>
   );
-}
+};

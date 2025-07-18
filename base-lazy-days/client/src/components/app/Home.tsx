@@ -3,7 +3,7 @@ import { GiFlowerPot } from "react-icons/gi";
 
 import { BackgroundImage } from "@/components/common/BackgroundImage";
 
-export function Home() {
+export const Home = () => {
   return (
     <Stack textAlign="center" justify="center" height="84vh">
       <BackgroundImage />
@@ -15,4 +15,4 @@ export function Home() {
       <Text>Address: nearby</Text>
     </Stack>
   );
-}
+};

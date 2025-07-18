@@ -4,7 +4,7 @@ import { useTreatments } from "../treatments/hooks/useTreatments";
 import { useStaff } from "./hooks/useStaff";
 import { Staff } from "./Staff";
 
-export function AllStaff() {
+export const AllStaff = () => {
   // replace with data from React Query
   const { staff, filter, setFilter } = useStaff();
   const treatments = useTreatments();
@@ -32,4 +32,4 @@ export function AllStaff() {
       </RadioGroup>
     </Box>
   );
-}
+};

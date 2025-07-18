@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useLoginData } from "@/auth/AuthContext";
 import { useAuthActions } from "@/auth/useAuthActions";
 
-export function Signin() {
+export const Signin = () => {
   const [email, setEmail] = useState("test");
   const [password, setPassword] = useState("test");
   const [dirty, setDirty] = useState({ email: false, password: false });
@@ -95,4 +95,4 @@ export function Signin() {
       </Flex>
     </>
   );
-}
+};

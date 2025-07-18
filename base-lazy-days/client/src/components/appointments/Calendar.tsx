@@ -14,10 +14,10 @@ import { useAppointments } from "./hooks/useAppointments";
 
 import { UserAppointments } from "@/components/user/UserAppointments";
 
-export function Calendar() {
+export const Calendar = () => {
   const currentDate = dayjs();
 
-  const { appointments, monthYear, updateMonthYear, showAll, setShowAll } =
+  const { appointments, monthYear, setShowAll, showAll, updateMonthYear } =
     useAppointments();
 
   return (
@@ -66,4 +66,4 @@ export function Calendar() {
       <UserAppointments />
     </Box>
   );
-}
+};

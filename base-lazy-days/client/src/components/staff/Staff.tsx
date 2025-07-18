@@ -7,7 +7,7 @@ import { Card } from "@/components/common/Card";
 interface StaffProps {
   staffData: StaffType;
 }
-export function Staff({ staffData }: StaffProps) {
+export const Staff = ({ staffData }: StaffProps) => {
   const cardContents = (
     <Text textAlign="center">{staffData.treatmentNames.join(", ")}</Text>
   );
@@ -19,4 +19,4 @@ export function Staff({ staffData }: StaffProps) {
       cardContents={cardContents}
     />
   );
-}
+};

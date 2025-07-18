@@ -24,7 +24,7 @@ interface AppointmentsTableProps {
   userAppointments: Appointment[];
 }
 
-function AppointmentsTable({ userAppointments }: AppointmentsTableProps) {
+const AppointmentsTable = ({ userAppointments }: AppointmentsTableProps) => {
   const cancelAppointment = useCancelAppointment();
 
   return (
@@ -55,9 +55,9 @@ function AppointmentsTable({ userAppointments }: AppointmentsTableProps) {
       </Tbody>
     </Table>
   );
-}
+};
 
-export function UserAppointments() {
+export const UserAppointments = () => {
   const { userId } = useLoginData();
 
   const userAppointments = useUserAppointments();
@@ -81,4 +81,4 @@ export function UserAppointments() {
       </Center>
     </Box>
   );
-}
+};

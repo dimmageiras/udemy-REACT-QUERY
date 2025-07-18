@@ -3,31 +3,33 @@ import dayjs from "dayjs";
 
 import { Appointment as AppointmentType } from "@shared/types";
 
+import { useCancelAppointment } from "./hooks/useCancelAppointment";
 import { useReserveAppointment } from "./hooks/useReserveAppointment";
 import { appointmentInPast, getAppointmentColor } from "./utils";
 
 import { useLoginData } from "@/auth/AuthContext";
 
 // determine whether this appointment can be reserved / un-reserved by logged-in user
-function isClickable(
+const isClickable = (
   userId: number | null,
   appointmentData: AppointmentType
-): boolean {
+): boolean => {
   return !!(
     userId &&
     (!appointmentData.userId || appointmentData.userId === userId) &&
     !appointmentInPast(appointmentData)
   );
-}
+};
 
 interface AppointmentProps {
   appointmentData: AppointmentType;
 }
 
-export function Appointment({ appointmentData }: AppointmentProps) {
+export const Appointment = ({ appointmentData }: AppointmentProps) => {
   const { userId } = useLoginData();
 
   const reserveAppointment = useReserveAppointment();
+  const cancelAppointment = useCancelAppointment();
   const [textColor, bgColor] = getAppointmentColor(appointmentData, userId);
 
   const clickable = isClickable(userId, appointmentData);
@@ -37,7 +39,15 @@ export function Appointment({ appointmentData }: AppointmentProps) {
   // turn the lozenge into a button if it's clickable
   if (clickable) {
     onAppointmentClick = userId
-      ? () => reserveAppointment(appointmentData)
+      ? () => {
+          // If the appointment is already taken by this user, cancel it
+          if (appointmentData.userId === userId) {
+            cancelAppointment(appointmentData);
+          } else {
+            // Otherwise, reserve it
+            reserveAppointment(appointmentData);
+          }
+        }
       : undefined;
     hoverCss = {
       transform: "translateY(-1px)",
@@ -67,4 +77,4 @@ export function Appointment({ appointmentData }: AppointmentProps) {
       </HStack>
     </Box>
   );
-}
+};

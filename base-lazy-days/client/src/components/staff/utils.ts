@@ -1,12 +1,12 @@
 import type { Staff } from "@shared/types";
 
-export function filterByTreatment(
+export const filterByTreatment = (
   staff: Staff[],
   treatmentName: string
-): Staff[] {
+): Staff[] => {
   return staff.filter((person) =>
     person.treatmentNames
       .map((t) => t.toLowerCase())
       .includes(treatmentName.toLowerCase())
   );
-}
+};

@@ -1,22 +1,42 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { Appointment } from "@shared/types";
 
+import { useLoginData } from "@/auth/AuthContext";
 import { axiosInstance } from "@/axiosInstance";
 import { useCustomToast } from "@/components/app/hooks/useCustomToast";
-import { queryKeys } from "@/react-query/constants";
+import { KeyFactories } from "@/react-query/key-factories";
 
 // for when server call is needed
-// async function removeAppointmentUser(appointment: Appointment): Promise<void> {
-//   const patchData = [{ op: 'remove', path: '/userId' }];
-//   await axiosInstance.patch(`/appointment/${appointment.id}`, {
-//     data: patchData,
-//   });
-// }
+const removeAppointmentUser = async (
+  appointment: Appointment
+): Promise<void> => {
+  const patchData = [{ op: "remove", path: "/userId" }];
 
-export function useCancelAppointment() {
+  await axiosInstance.patch(`/appointment/${appointment.id}`, {
+    data: patchData,
+  });
+};
+
+export const useCancelAppointment = () => {
+  const queryClient = useQueryClient();
+  const { userId } = useLoginData();
   const toast = useCustomToast();
 
-  // TODO: replace with mutate function
-  return (appointment: Appointment) => {
-    // nothing to see here
-  };
-}
+  const { generateAppointmentsKey } = KeyFactories;
+
+  const { mutate: cancelAppointment } = useMutation({
+    mutationFn: removeAppointmentUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: generateAppointmentsKey(userId),
+      });
+      toast({
+        status: "warning",
+        title: "You have cancelled the appointment",
+      });
+    },
+  });
+
+  return cancelAppointment;
+};

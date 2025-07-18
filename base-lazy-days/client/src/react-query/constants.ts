@@ -3,4 +3,4 @@ export const queryKeys = {
   appointments: "appointments",
   staff: "staff",
   user: "user",
-};
+} as const;

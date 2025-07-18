@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from "react";
 import { createContext, useContext, useState } from "react";
 
 import {
@@ -5,7 +6,7 @@ import {
   getStoredLoginData,
   setStoredLoginData,
 } from "./local-storage";
-import { LoginData } from "./types";
+import type { LoginData } from "./types";
 
 type AuthContextValue = {
   userId: number | null;
@@ -30,7 +31,7 @@ export const useLoginData = () => {
 
 export const AuthContextProvider = ({
   children,
-}: React.PropsWithChildren<object>) => {
+}: PropsWithChildren<object>) => {
   const [loginData, setLoginDataRaw] = useState<LoginData | null>(() =>
     getStoredLoginData()
   );

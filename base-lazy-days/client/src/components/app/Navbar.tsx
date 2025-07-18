@@ -1,12 +1,15 @@
 import { Box, Button, Flex, HStack, Icon, Link } from "@chakra-ui/react";
+import { useMutationState } from "@tanstack/react-query";
 import { ReactNode } from "react";
 import { GiFlowerPot } from "react-icons/gi";
-import { Link as RouterLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+
+import { User } from "@shared/types";
 
 import { useLoginData } from "@/auth/AuthContext";
 import { useAuthActions } from "@/auth/useAuthActions";
 import { useUser } from "@/components/user/hooks/useUser";
+import { KeyFactories } from "@/react-query/key-factories";
 
 const Links = ["Treatments", "Staff", "Calendar"];
 
@@ -27,13 +30,23 @@ const NavLink = ({ to, children }: { to: string; children: ReactNode }) => (
   </Link>
 );
 
-export function Navbar() {
+export const Navbar = () => {
   // use login data for signin / signout button, for
   //   base app that doesn't retrieve user data from the server yet
   const { userId } = useLoginData();
   const { user } = useUser();
   const { signout } = useAuthActions();
   const navigate = useNavigate();
+
+  const { generateUpdatedUserKey } = KeyFactories;
+  const pendingData = useMutationState({
+    filters: {
+      mutationKey: generateUpdatedUserKey(),
+      status: "pending",
+    },
+    select: (mutation) => mutation.state.variables,
+  });
+  const pendingUser = (pendingData?.[0] as User) ?? null;
 
   return (
     <Box bg="gray.900" px={4}>
@@ -53,7 +66,11 @@ export function Navbar() {
         <HStack>
           {userId ? (
             <>
-              {user && <NavLink to={`/user/${user.id}`}>{user.email}</NavLink>}
+              {user ? (
+                <NavLink to={`/user/${user.id}`}>
+                  {pendingUser?.name ?? user.name}
+                </NavLink>
+              ) : null}
               <Button onClick={() => signout()}>Sign out</Button>
             </>
           ) : (
@@ -63,4 +80,4 @@ export function Navbar() {
       </Flex>
     </Box>
   );
-}
+};

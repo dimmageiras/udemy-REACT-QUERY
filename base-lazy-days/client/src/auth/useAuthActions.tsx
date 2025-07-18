@@ -18,18 +18,18 @@ type UserResponse = { user: User };
 type ErrorResponse = { message: string };
 type AuthResponseType = UserResponse | ErrorResponse;
 
-export function useAuthActions(): UseAuth {
+export const useAuthActions = (): UseAuth => {
   const { updateUser, clearUser } = useUser();
   const { setLoginData, clearLoginData } = useLoginData();
 
   const SERVER_ERROR = "There was an error contacting the server.";
   const toast = useCustomToast();
 
-  async function authServerCall(
+  const authServerCall = async (
     urlEndpoint: string,
     email: string,
     password: string
-  ): Promise<void> {
+  ): Promise<void> => {
     try {
       const { data, status }: AxiosResponse<AuthResponseType> =
         await axiosInstance({
@@ -66,16 +66,16 @@ export function useAuthActions(): UseAuth {
         status: "error",
       });
     }
-  }
+  };
 
-  async function signin(email: string, password: string): Promise<void> {
+  const signin = async (email: string, password: string): Promise<void> => {
     authServerCall("/signin", email, password);
-  }
-  async function signup(email: string, password: string): Promise<void> {
+  };
+  const signup = async (email: string, password: string): Promise<void> => {
     authServerCall("/user", email, password);
-  }
+  };
 
-  function signout(): void {
+  const signout = (): void => {
     // clear user from stored user data
     clearUser();
     clearLoginData();
@@ -83,12 +83,12 @@ export function useAuthActions(): UseAuth {
       title: "Logged out!",
       status: "info",
     });
-  }
+  };
 
   // Return the user object and auth methods
   return {
     signin,
-    signup,
     signout,
+    signup,
   };
-}
+};

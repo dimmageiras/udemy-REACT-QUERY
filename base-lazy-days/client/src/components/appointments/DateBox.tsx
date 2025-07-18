@@ -9,9 +9,12 @@ interface DateBoxProps {
   gridColumn?: number;
   appointments?: AppointmentType[];
 }
-DateBox.defaultProps = { gridColumn: null, appointments: [] };
 
-export function DateBox({ date, gridColumn, appointments = [] }: DateBoxProps) {
+export const DateBox = ({
+  date,
+  gridColumn = null,
+  appointments = [],
+}: DateBoxProps) => {
   return (
     <Box
       w="100%"
@@ -31,4 +34,4 @@ export function DateBox({ date, gridColumn, appointments = [] }: DateBoxProps) {
       </Stack>
     </Box>
   );
-}
+};

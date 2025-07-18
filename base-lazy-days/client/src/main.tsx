@@ -4,9 +4,10 @@ import ReactDOM from "react-dom/client";
 
 import { theme } from "./theme";
 
-import { App } from "@/components/app/App";
+import { App } from "@/App";
 
 const root = document.getElementById("root");
+
 if (root) {
   ReactDOM.createRoot(root).render(
     <React.StrictMode>

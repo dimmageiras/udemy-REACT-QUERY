@@ -8,17 +8,21 @@ import {
   Input,
   Stack,
 } from "@chakra-ui/react";
+import { useMutationState } from "@tanstack/react-query";
 import { Field, Form, Formik } from "formik";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { User } from "@shared/types";
 
 import { usePatchUser } from "./hooks/usePatchUser";
 import { useUser } from "./hooks/useUser";
 import { UserAppointments } from "./UserAppointments";
 
 import { useLoginData } from "@/auth/AuthContext";
+import { KeyFactories } from "@/react-query/key-factories";
 
-export function UserProfile() {
+export const UserProfile = () => {
   const { userId } = useLoginData();
   const { user } = useUser();
   const patchUser = usePatchUser();
@@ -32,6 +36,16 @@ export function UserProfile() {
     }
   }, [userId, navigate]);
 
+  const { generateUpdatedUserKey } = KeyFactories;
+  const pendingData = useMutationState({
+    filters: {
+      mutationKey: generateUpdatedUserKey(),
+      status: "pending",
+    },
+    select: (mutation) => mutation.state.variables,
+  });
+  const pendingUser = (pendingData?.[0] as User) ?? null;
+
   const formElements = ["name", "address", "phone"];
   interface FormValues {
     name: string;
@@ -44,15 +58,15 @@ export function UserProfile() {
       <Stack spacing={8} mx="auto" w="xl" py={12} px={6}>
         <UserAppointments />
         <Stack textAlign="center">
-          <Heading>Your information</Heading>
+          <Heading>Information for {pendingUser?.name ?? user?.name}</Heading>
         </Stack>
         <Box rounded="lg" bg="white" boxShadow="lg" p={8}>
           <Formik
             enableReinitialize
             initialValues={{
-              name: user?.name ?? "",
-              address: user?.address ?? "",
-              phone: user?.phone ?? "",
+              name: pendingUser?.name ?? user?.name ?? "",
+              address: pendingUser?.address ?? user?.address ?? "",
+              phone: pendingUser?.phone ?? user?.phone ?? "",
             }}
             onSubmit={(values: FormValues) => {
               patchUser({ ...user, ...values });
@@ -74,4 +88,4 @@ export function UserProfile() {
       </Stack>
     </Flex>
   );
-}
+};

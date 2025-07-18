@@ -2,7 +2,7 @@ import { Image } from "@chakra-ui/react";
 
 import splashImg from "@/images/splash.jpg";
 
-export function BackgroundImage() {
+export const BackgroundImage = () => {
   return (
     <Image
       minHeight="100%"
@@ -17,4 +17,4 @@ export function BackgroundImage() {
       alt="peaceful orchids and stacked rocks"
     />
   );
-}
+};

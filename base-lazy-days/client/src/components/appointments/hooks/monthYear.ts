@@ -1,4 +1,5 @@
-import dayjs from 'dayjs';
+import type { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 // for storing current month / year details
 export interface MonthYear {
@@ -11,32 +12,33 @@ export interface MonthYear {
 }
 
 // for incrementing MonthYear
-export function getUpdatedMonthYear(
+export const getUpdatedMonthYear = (
   monthYear: MonthYear,
-  monthIncrement: number,
-): dayjs.Dayjs {
+  monthIncrement: number
+): Dayjs => {
   // the clone is necessary to prevent mutation
-  return monthYear.startDate.clone().add(monthIncrement, 'months');
-}
+  return monthYear.startDate.clone().add(monthIncrement, "months");
+};
 
 // get calendar-relevant data for the month containing initialDate
-export function getMonthYearDetails(initialDate: dayjs.Dayjs): MonthYear {
-  const month = initialDate.format('MM');
-  const year = initialDate.format('YYYY');
+export const getMonthYearDetails = (initialDate: Dayjs): MonthYear => {
+  const month = initialDate.format("MM");
+  const year = initialDate.format("YYYY");
   const startDate = dayjs(`${year}${month}01`);
-  const firstDOW = Number(startDate.format('d'));
-  const lastDate = Number(startDate.clone().endOf('month').format('DD'));
-  const monthName = startDate.format('MMMM');
-  return { startDate, firstDOW, lastDate, monthName, month, year };
-}
+  const firstDOW = Number(startDate.format("d"));
+  const lastDate = Number(startDate.clone().endOf("month").format("DD"));
+  const monthName = startDate.format("MMMM");
 
-export function getNewMonthYear(
+  return { startDate, firstDOW, lastDate, monthName, month, year };
+};
+
+export const getNewMonthYear = (
   prevData: MonthYear,
-  monthIncrement: number,
-): MonthYear {
+  monthIncrement: number
+): MonthYear => {
   // update the monthYear by the specified increment
   const newMonthYear = getUpdatedMonthYear(prevData, monthIncrement);
 
   // return object with the details for the new monthYear
   return getMonthYearDetails(newMonthYear);
-}
+};
